@@ -4,9 +4,11 @@
  */
 function ulf_aarhus_settings_install() {
   // Disable panels modules that don't quite get the renaming of our theme.
+  // Disable default_search_settings
   $module_disable = array(
     'panels',
     'page_manager',
+    'ulf_search_settings'
   );
 
   module_disable($module_disable);
@@ -19,6 +21,7 @@ function ulf_aarhus_settings_install() {
   cache_clear_all();
 
   // Enable panels and pagemanager, and modules depending on them that was disabled.
+  // Enable aarhus_search_settings.
   $module_enable = array(
     'panels',
     'ulf_base',
@@ -33,7 +36,8 @@ function ulf_aarhus_settings_install() {
     'ulf_frontpage',
     'ulf_scheduler_notify',
     'page_manager',
-    'ulf_workflow'
+    'ulf_workflow',
+    'ulf_aarhus_search_settings'
   );
   module_enable($module_enable);
 }
