@@ -1,0 +1,4 @@
+name = Ulf aarhus settings
+description = Holds settings specific to Ulf i Aarhus
+package = Ulf base
+core = 7.x
