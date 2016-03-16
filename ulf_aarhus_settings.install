@@ -50,7 +50,7 @@ function ulf_aarhus_settings_update_7001() {
     'width' => '600px',
     'height' => '400px',
     'latlong' => '56.15933803678744,10.20316869020462',
-    'zoom' => '13',
+    'zoom' => '17',
     'maxzoom' => '14',
     'styles' => array(
       'line_default' => array(
