@@ -113,3 +113,14 @@ function ulf_aarhus_settings_update_7002() {
 
   variable_set('gmap_default', $settings);
 }
+
+/**
+ * Disable google analytics.
+ */
+function ulf_aarhus_settings_update_7003() {
+  $module_disable = array(
+    'googleanalytics'
+  );
+
+  module_disable($module_disable);
+}
