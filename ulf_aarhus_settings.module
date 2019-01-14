@@ -1,1 +1,12 @@
-<?php ?>
+<?php
+
+/**
+ * Implements hook_default_search_api_index_alter().
+ *
+ * Change the default search api index from features/ulf_search_settings
+ */
+function ulf_aarhus_settings_default_search_api_index_alter(&$defaults) {
+  // Change search filter role for user index. Role ID for aarhus differs from other sites.
+  unset($defaults['users']->options['data_alter_callbacks']['search_api_alter_role_filter']['settings']['roles'][3]);
+  $defaults['users']->options['data_alter_callbacks']['search_api_alter_role_filter']['settings']['roles'][18] = '18';
+}

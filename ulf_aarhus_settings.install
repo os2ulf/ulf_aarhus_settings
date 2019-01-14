@@ -117,7 +117,7 @@ function ulf_aarhus_settings_update_7002() {
 /**
  * Disable google analytics.
  */
-function ulf_aarhus_settings_update_7003() {
+function ulf_aarhus_settings_update_7103() {
   $module_disable = array(
     'googleanalytics'
   );
