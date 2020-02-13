@@ -10,3 +10,16 @@ function ulf_aarhus_settings_default_search_api_index_alter(&$defaults) {
   unset($defaults['users']->options['data_alter_callbacks']['search_api_alter_role_filter']['settings']['roles'][3]);
   $defaults['users']->options['data_alter_callbacks']['search_api_alter_role_filter']['settings']['roles'][18] = '18';
 }
+
+/**
+ * Implements hook_mail_alter().
+ */
+function ulf_aarhus_settings_mail_alter(&$message) {
+  $default_from = variable_get('site_mail', ini_get('sendmail_from'));
+  $message['from'] = 'ULF i Aarhus <'. $default_from .'>';
+  $message['headers']['From'] = $message['headers']['Sender'] = $message['headers']['Return-Path'] = $message['headers']['Errors-To'] = $message['from'];
+
+  if(empty($message['headers']['Reply-to'])) {
+    $message['headers']['Reply-To'] = $message['from'];
+  }
+}
