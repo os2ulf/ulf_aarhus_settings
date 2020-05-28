@@ -17,5 +17,9 @@ function ulf_aarhus_settings_default_search_api_index_alter(&$defaults) {
 function ulf_aarhus_settings_mail_alter(&$message) {
   $default_from = variable_get('site_mail', ini_get('sendmail_from'));
   $message['from'] = 'ULF i Aarhus <'. $default_from .'>';
-  $message['headers']['From'] = $message['headers']['Sender'] = $message['headers']['Return-Path'] = $message['headers']['Errors-To'] = $message['headers']['Reply-To'] = $message['from'];
+  $message['headers']['From'] = $message['headers']['Sender'] = $message['headers']['Return-Path'] = $message['headers']['Errors-To'] = $message['from'];
+
+  if(empty($message['headers']['Reply-to'])) {
+    $message['headers']['Reply-To'] = $message['from'];
+  }
 }
