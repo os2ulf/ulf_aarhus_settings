@@ -29,6 +29,7 @@ function ulf_aarhus_settings_mail_alter(&$message) {
  */
 function ulf_aarhus_settings_video_embed_handler_info_alter(&$info) {
   $info['youtube']['function'] = '_ulf_aarhus_settings_youtube_embed';
+  $info['vimeo']['function'] = '_ulf_aarhus_settings_vimeo_embed';
 }
 
 /**
@@ -78,4 +79,45 @@ function _ulf_aarhus_settings_youtube_embed($url, $settings) {
   $output['#markup'] = '<iframe src="" data-category-consent="cookie_cat_statistic" class="' . check_plain($class) . '" width="' . check_plain($settings['width']) . '" height="' . check_plain($settings['height']) . '" data-consent-src="//www.youtube.com/embed/' . $id . '?' . $settings_str . '" frameborder="0" allowfullscreen></iframe>';
 
   return $output;
+}
+
+/**
+ * Custom vimeo embed handler.
+ * Grabbed from video_embed_field/video_embed_field.handlers.inc and added
+ * consent attributes.
+ *
+ * @param $url
+ * @param $settings
+ *
+ * @return array
+ */
+function _ulf_aarhus_settings_vimeo_embed($url, $settings) {
+  $vimeo_data = _video_embed_field_get_vimeo_data($url);
+
+  // Get ID of video from URL.
+  $id = _video_embed_field_get_vimeo_id($vimeo_data);
+
+  if (empty($id)) {
+    return array(
+      '#markup' => l($url, $url),
+    );
+  }
+
+  // Construct the embed code.
+  $settings['player_id'] = drupal_html_id('vimeo-' . $id);
+  if (!empty($settings['froogaloop'])) {
+    $settings['api'] = 1;
+  }
+  unset($settings['froogaloop']);
+
+  // Add class to variable to avoid adding it to URL param string.
+  $class = $settings['class'];
+  unset($settings['class']);
+
+  $settings_str = _video_embed_code_get_settings_str($settings);
+
+  return array(
+    '#markup' => '<iframe src="" data-category-consent="cookie_cat_statistic" class="' . check_plain($class) . '" id="' . $settings['player_id'] . '" width="' . check_plain($settings['width']) . '" height="' . check_plain($settings['height']) . '" data-consent-src="//player.vimeo.com/video/' . $id .
+      '?' . $settings_str . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>',
+  );
 }
