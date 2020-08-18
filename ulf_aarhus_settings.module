@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * @file
+ * Code for the Ulf aarhus settings feature.
+ */
+
+include_once 'ulf_aarhus_settings.features.inc';
+
+/**
  * Implements hook_default_search_api_index_alter().
  *
  * Change the default search api index from features/ulf_search_settings
