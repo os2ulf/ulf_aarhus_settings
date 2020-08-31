@@ -47,9 +47,10 @@ function ulf_aarhus_settings_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'title' => 'title',
-    'name' => 'name',
+    'field_collection_price' => 'field_collection_price',
     'field_price_description' => 'field_price_description',
     'field_subject' => 'field_subject',
+    'name' => 'name',
   );
   $handler->display->display_options['style_options']['class'] = '';
   $handler->display->display_options['style_options']['default'] = '-1';
@@ -61,21 +62,26 @@ function ulf_aarhus_settings_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'name' => array(
+    'field_collection_price' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_price_description' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_price_description' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
+    'field_subject' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_subject' => array(
+    'name' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -96,6 +102,17 @@ function ulf_aarhus_settings_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Felt: Indhold: Pris */
+  $handler->display->display_options['fields']['field_collection_price']['id'] = 'field_collection_price';
+  $handler->display->display_options['fields']['field_collection_price']['table'] = 'field_data_field_collection_price';
+  $handler->display->display_options['fields']['field_collection_price']['field'] = 'field_collection_price';
+  $handler->display->display_options['fields']['field_collection_price']['alter']['trim_whitespace'] = TRUE;
+  $handler->display->display_options['fields']['field_collection_price']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['field_collection_price']['type'] = 'field_collection_fields';
+  $handler->display->display_options['fields']['field_collection_price']['settings'] = array(
+    'view_mode' => 'full',
+  );
+  $handler->display->display_options['fields']['field_collection_price']['delta_offset'] = '0';
   /* Felt: Indhold: Beskrivelse til pris */
   $handler->display->display_options['fields']['field_price_description']['id'] = 'field_price_description';
   $handler->display->display_options['fields']['field_price_description']['table'] = 'field_data_field_price_description';
@@ -149,6 +166,16 @@ function ulf_aarhus_settings_views_default_views() {
   $handler->display->display_options['menu']['name'] = 'management';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
+
+  /* Display: Data export */
+  $handler = $view->new_display('views_data_export', 'Data export', 'views_data_export_1');
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
+  $handler->display->display_options['path'] = 'admin/settings/custom/courses/courses.csv';
+  $handler->display->display_options['displays'] = array(
+    'page' => 'page',
+    'default' => 0,
+  );
   $translatables['ulf_courses'] = array(
     t('Master'),
     t('Forløb med en pris over 500 kr.'),
@@ -168,10 +195,12 @@ function ulf_aarhus_settings_views_default_views() {
     t('field collection item from field_collection_price'),
     t('forfatter'),
     t('Titel'),
+    t('Pris'),
     t('Yderligere oplysninger til pris'),
     t('Emneområde'),
     t('Udbyder'),
     t('Page'),
+    t('Data export'),
   );
   $export['ulf_courses'] = $view;
 
