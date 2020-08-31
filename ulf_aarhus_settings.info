@@ -1,4 +1,9 @@
 name = Ulf aarhus settings
 description = Holds settings specific to Ulf i Aarhus
-package = Ulf base
 core = 7.x
+package = Ulf base
+dependencies[] = ctools
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = ulf_courses
