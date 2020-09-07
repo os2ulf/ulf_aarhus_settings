@@ -128,3 +128,16 @@ function _ulf_aarhus_settings_vimeo_embed($url, $settings) {
       '?' . $settings_str . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>',
   );
 }
+
+function ulf_aarhus_settings_views_post_execute(&$view) {
+  if ($view->name == 'ulf_courses') {
+    foreach ($view->result as $result) {
+      if (!empty($result->field_field_collection_price)) {
+        $entity = reset($result->field_field_collection_price[0]['rendered']['entity']['field_collection_item']);
+        $price = $entity['field_price'][0]['#markup'] . ',- ' . $entity['field_unit_price'][0]['#markup'] . ' (' . $entity['field_moms'][0]['#markup'] .')';
+        $result->field_field_collection_price[0]['rendered']['#markup'] = $price;
+      }
+
+    }
+  }
+}
