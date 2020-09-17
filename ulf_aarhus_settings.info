@@ -2,8 +2,11 @@ name = Ulf aarhus settings
 description = Holds settings specific to Ulf i Aarhus
 core = 7.x
 package = Ulf base
-dependencies[] = views
-dependencies[] = views_data_export
-features[ctools][] = views:views_default:3.0
+dependencies[] = features
+dependencies[] = list
+dependencies[] = options
+dependencies[] = ulf_course
 features[features_api][] = api:2
-features_exclude[dependencies][ctools] = ctools
+features[field_base][] = field_practical_info_buttons
+features[field_instance][] = node-course-field_practical_info_buttons
+
