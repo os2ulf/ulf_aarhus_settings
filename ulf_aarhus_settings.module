@@ -134,3 +134,17 @@ function ulf_aarhus_settings_views_post_execute(&$view) {
     }
   }
 }
+
+/**
+ * Hide buttons for all roles except for editors
+ */
+/**
+ * Implements hook_form_alter().
+ */
+function ulf_aarhus_settings_form_course_node_form_alter(&$form, &$form_state) {
+  global $user;
+
+  if (!in_array('editor', $user->roles, false)) {
+    $form['field_practical_info_buttons']['#access'] = FALSE;
+  }
+}
