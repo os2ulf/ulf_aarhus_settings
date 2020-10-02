@@ -9,4 +9,3 @@ dependencies[] = ulf_course
 features[features_api][] = api:2
 features[field_base][] = field_practical_info_buttons
 features[field_instance][] = node-course-field_practical_info_buttons
-

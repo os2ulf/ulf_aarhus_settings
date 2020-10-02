@@ -2,7 +2,7 @@
 
 /**
  * @file
- * ulf_aarhus_settingss.features.field_instance.inc
+ * ulf_aarhus_settings.features.field_instance.inc
  */
 
 /**

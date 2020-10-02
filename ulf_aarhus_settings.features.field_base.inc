@@ -2,7 +2,7 @@
 
 /**
  * @file
- * ulf_aarhus_settingss.features.field_base.inc
+ * ulf_aarhus_settings.features.field_base.inc
  */
 
 /**
@@ -27,8 +27,8 @@ function ulf_aarhus_settings_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        'show_transport_request' => ' Søg tilskud til transport',
-        'show_free_course_request' => ' Søg om refusion af forløbet',
+        'show_free_course_request' => ' ULF i Aarhus betaler dette forløb - ansøg her!',
+        'show_transport_request' => ' Information om transport',
       ),
       'allowed_values_function' => '',
     ),
