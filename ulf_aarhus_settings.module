@@ -76,7 +76,8 @@ function _ulf_aarhus_settings_youtube_embed($url, $settings) {
   $settings['wmode'] = 'opaque';
   $settings_str = urlencode(_video_embed_code_get_settings_str($settings));
 
-  $output['#markup'] = '<iframe src="" data-category-consent="cookie_cat_statistic" class="' . check_plain($class) . '" width="' . check_plain($settings['width']) . '" height="' . check_plain($settings['height']) . '" data-consent-src="//www.youtube.com/embed/' . $id . '?' . $settings_str . '" frameborder="0" allowfullscreen></iframe>';
+  $output['#markup'] = '<iframe src="" data-category-consent="cookie_cat_statistic" class="' . check_plain($class) . '" width="' . check_plain($settings['width']) . '" height="' . check_plain($settings['height']) . '" data-consent-src="//www.youtube.com/embed/' . $id . '?' . $settings_str . '" frameborder="0" allowfullscreen></iframe>
+<div class="consent-placeholder" data-category="cookie_cat_statistic" onClick="CookieConsent.renew()">' . t('You have not yet consent to statistic cookies') . '</div>';
 
   return $output;
 }
@@ -118,7 +119,7 @@ function _ulf_aarhus_settings_vimeo_embed($url, $settings) {
 
   return array(
     '#markup' => '<iframe src="" data-category-consent="cookie_cat_statistic" class="' . check_plain($class) . '" id="' . $settings['player_id'] . '" width="' . check_plain($settings['width']) . '" height="' . check_plain($settings['height']) . '" data-consent-src="//player.vimeo.com/video/' . $id .
-      '?' . $settings_str . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>',
+      '?' . $settings_str . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe><div class="consent-placeholder" data-category="cookie_cat_statistic" onClick="CookieConsent.renew()">' . t('You have not yet consent to statistic cookies') . '</div>'
   );
 }
 
