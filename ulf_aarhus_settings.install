@@ -129,11 +129,13 @@ function ulf_aarhus_settings_update_7103() {
 /**
  * Select checkbox "show_free_course_request" for all courses that are not free
  */
-function ulf_aarhus_settings_update_7105() {
+function ulf_aarhus_settings_update_7106() {
 
     $query = db_select('node', 'n');
     $query->fields('n', array('nid'));
     $query->condition('type', 'course');
+    $query->join('taxonomy_index', 'term', 'n.nid = term.nid');
+    $query->condition('term.tid', 149, '!=');
     $query->join('field_data_field_free', 'field_free', 'n.nid = field_free.entity_id');
     $query->condition('field_free.field_free_value', 1, '!=');
     $results = $query->execute();
@@ -144,8 +146,14 @@ function ulf_aarhus_settings_update_7105() {
     }
     $course_nodes = node_load_multiple($array);
     foreach ($course_nodes as $node_course) {
-      $node_course->field_practical_info_buttons[LANGUAGE_NONE][1]['value'] = 'show_free_course_request';
-      node_save($node_course);
+      try {
+        $node_course->field_practical_info_buttons[LANGUAGE_NONE][1]['value'] = 'show_free_course_request';
+        node_save($node_course);
+      } catch (Exception $e) {
+        echo $e->getMessage();
+        continue;
+      }
+
     }
 
 }
