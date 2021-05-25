@@ -148,3 +148,95 @@ function ulf_aarhus_settings_form_course_node_form_alter(&$form, &$form_state) {
     $form['field_practical_info_buttons']['#access'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_menu().
+ */
+function ulf_aarhus_settings_menu() {
+  $items = [];
+
+  $items['admin/ulfiaarhus/update_show_free_courses_request'] = [
+    'title' => 'Select checkbox "show_free_course_request" for all courses that are not free',
+    'description' => 'Select checkbox "show_free_course_request" for all courses that are not free',
+    'page callback' => 'ulf_aarhus_settings_update_non_free_courses',
+    'page arguments' => [],
+    'access arguments' => ['access administration pages']
+  ];
+
+  return $items;
+}
+
+/**
+ * Select checkbox "show_free_course_request" for all courses that are not free batch
+ */
+function ulf_aarhus_settings_update_non_free_courses() {
+
+  $query = db_select('node', 'n');
+  $query->fields('n', array('nid'));
+  $query->condition('type', 'course');
+  $query->join('taxonomy_index', 'term', 'n.nid = term.nid');
+  $query->condition('term.tid', 149, '!=');
+  $query->join('field_data_field_free', 'field_free', 'n.nid = field_free.entity_id');
+  $query->condition('field_free.field_free_value', 1, '!=');
+  $results = $query->execute()->fetchAll();
+
+  $batch = array(
+    'operations' => array(),
+    'finished' => 'ulf_aarhus_settings_update_non_free_courses_finished', // runs after batch is finished
+    'title' => t('Updating courses'),
+    'init_message' => t('Courses updates is starting.'),
+    'progress_message' => t('Updating @current out of @total.'),
+    'error_message' => t('Courses updates has encountered an error.'),
+  );
+  $progress = 0; // where to start
+  $limit = 100; // how many to process for each run
+  $max = count($results); // how many records to process until stop
+  while ($progress <= $max) {
+    $batch['operations'][] = array('ulf_aarhus_settings_update_non_free_courses_process', array($progress, $limit));
+    $progress = $progress + $limit;
+  }
+  batch_set($batch);
+  batch_process('admin/ulfiaarhus/update_show_free_courses_request'); // page to return to after complete
+}
+
+// this is what runs multiple times per batch
+function ulf_aarhus_settings_update_non_free_courses_process($progress, $limit, &$context) {
+
+  $query = db_select('node', 'n');
+  $query->fields('n', array('nid'));
+  $query->condition('type', 'course');
+  $query->join('taxonomy_index', 'term', 'n.nid = term.nid');
+  $query->condition('term.tid', 149, '!=');
+  $query->join('field_data_field_free', 'field_free', 'n.nid = field_free.entity_id');
+  $query->condition('field_free.field_free_value', 1, '!=');
+  $query->orderBy('n.nid', 'ASC');
+  $query->range($progress, $limit);
+  $results = $query->execute()->fetchAll();
+
+  $array = [];
+  foreach ($results as $item) {
+    $array[] = $item->nid;
+    $course_nodes = node_load($item->nid);
+    $course_nodes->field_practical_info_buttons[LANGUAGE_NONE][1]['value'] = 'show_free_course_request';
+    node_save($course_nodes);
+  }
+
+  // update progress for message
+  $progress = $progress + $limit;
+  // update message during each run so you know where you are in the process
+  $context['message'] = 'Now processing ' . $progress . ' - ' . $context['results'][0] . ' updated';
+}
+
+function ulf_aarhus_settings_update_non_free_courses_finished($success, $results, $operations) {
+  if ($success) {
+    drupal_set_message('Courses updates is complete');
+  }
+  else {
+    $error_operation = reset($operations);
+    $message = t('An error occurred while updating %error_operation with arguments: @arguments', array(
+      '%error_operation' => $error_operation[0],
+      '@arguments' => print_r($error_operation[1], TRUE)
+    ));
+    drupal_set_message($message, 'error');
+  }
+}
