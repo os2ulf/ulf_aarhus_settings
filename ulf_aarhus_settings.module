@@ -196,7 +196,7 @@ function ulf_aarhus_settings_update_non_free_courses() {
     $progress = $progress + $limit;
   }
   batch_set($batch);
-  batch_process('admin/ulfiaarhus/update_show_free_courses_request'); // page to return to after complete
+  batch_process('admin/ulfiaarhus/show_free_courses_request'); // page to return to after complete
 }
 
 // this is what runs multiple times per batch
