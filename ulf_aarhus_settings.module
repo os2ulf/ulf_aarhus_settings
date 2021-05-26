@@ -155,7 +155,7 @@ function ulf_aarhus_settings_form_course_node_form_alter(&$form, &$form_state) {
 function ulf_aarhus_settings_menu() {
   $items = [];
 
-  $items['admin/ulfiaarhus/update_show_free_courses_request'] = [
+  $items['admin/config/ulfiaarhus/update_show_free_courses_request'] = [
     'title' => 'Select checkbox "show_free_course_request" for all courses that are not free',
     'description' => 'Select checkbox "show_free_course_request" for all courses that are not free',
     'page callback' => 'ulf_aarhus_settings_update_non_free_courses',
@@ -197,7 +197,7 @@ function ulf_aarhus_settings_update_non_free_courses() {
     $progress = $progress + $limit;
   }
   batch_set($batch);
-  batch_process('admin/ulfiaarhus/update_show_free_courses_request_complete'); // page to return to after complete
+  batch_process('admin/config/ulfiaarhus/update_show_free_courses_request_complete'); // page to return to after complete
 }
 
 // this is what runs multiple times per batch
