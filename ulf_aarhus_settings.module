@@ -160,7 +160,8 @@ function ulf_aarhus_settings_menu() {
     'description' => 'Select checkbox "show_free_course_request" for all courses that are not free',
     'page callback' => 'ulf_aarhus_settings_update_non_free_courses',
     'page arguments' => [],
-    'access arguments' => ['access administration pages']
+    'access arguments' => ['access administration pages'],
+    'type' => MENU_CALLBACK,
   ];
 
   return $items;
@@ -196,7 +197,7 @@ function ulf_aarhus_settings_update_non_free_courses() {
     $progress = $progress + $limit;
   }
   batch_set($batch);
-  batch_process('admin/ulfiaarhus/show_free_courses_request'); // page to return to after complete
+  batch_process('admin/ulfiaarhus/update_show_free_courses_request_complete'); // page to return to after complete
 }
 
 // this is what runs multiple times per batch
@@ -224,7 +225,7 @@ function ulf_aarhus_settings_update_non_free_courses_process($progress, $limit, 
   // update progress for message
   $progress = $progress + $limit;
   // update message during each run so you know where you are in the process
-  $context['message'] = 'Now processing ' . $progress . ' - ' . $context['results'][0] . ' updated';
+  $context['message'] = 'Now updating ' . $progress . ' - ' . $context['results'][0];
 }
 
 function ulf_aarhus_settings_update_non_free_courses_finished($success, $results, $operations) {
