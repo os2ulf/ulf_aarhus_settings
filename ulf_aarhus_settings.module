@@ -219,12 +219,6 @@ function ulf_aarhus_settings_update_non_free_courses_process($progress, $limit, 
     $course_node->field_practical_info_buttons[LANGUAGE_NONE][1]['value'] = 'show_free_course_request';
     field_attach_presave('node', $course_node);
     field_attach_update('node', $course_node);
-    watchdog(
-      'ulf_aarhus_settings',
-      'Node array: <pre>@placeholder_name</pre>',
-      array('@placeholder_name' => print_r( $course_node, TRUE)),
-      WATCHDOG_INFO
-    );
   }
 
   // update progress for message
