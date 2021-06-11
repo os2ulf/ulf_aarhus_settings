@@ -175,8 +175,8 @@ function ulf_aarhus_settings_update_non_free_courses() {
   $query = db_select('node', 'n');
   $query->fields('n', array('nid'));
   $query->condition('type', 'course');
-  $query->join('taxonomy_index', 'term', 'n.nid = term.nid');
-  $query->condition('term.tid', 149, '!=');
+  $query->join('field_data_field_target_group', 'field_target_group', 'n.nid = field_target_group.entity_id');
+  $query->condition('field_target_group.field_target_group_tid', 149, '!=');
   $query->join('field_data_field_free', 'field_free', 'n.nid = field_free.entity_id');
   $query->condition('field_free.field_free_value', 1, '!=');
   $results = $query->execute()->fetchAll();
@@ -193,7 +193,7 @@ function ulf_aarhus_settings_update_non_free_courses() {
   $limit = 100; // how many to process for each run
   $max = count($results); // how many records to process until stop
   while ($progress <= $max) {
-    $batch['operations'][] = array('ulf_aarhus_settings_update_non_free_courses_process', array($progress, $limit));
+    $batch['operations'][] = array('ulf_aarhus_settings_update_non_free_courses_process', array($progress, $limit, $results));
     $progress = $progress + $limit;
   }
   batch_set($batch);
@@ -206,20 +206,25 @@ function ulf_aarhus_settings_update_non_free_courses_process($progress, $limit, 
   $query = db_select('node', 'n');
   $query->fields('n', array('nid'));
   $query->condition('type', 'course');
-  $query->join('taxonomy_index', 'term', 'n.nid = term.nid');
-  $query->condition('term.tid', 149, '!=');
+  $query->join('field_data_field_target_group', 'field_target_group', 'n.nid = field_target_group.entity_id');
+  $query->condition('field_target_group.field_target_group_tid', 149, '!=');
   $query->join('field_data_field_free', 'field_free', 'n.nid = field_free.entity_id');
   $query->condition('field_free.field_free_value', 1, '!=');
   $query->orderBy('n.nid', 'ASC');
   $query->range($progress, $limit);
   $results = $query->execute()->fetchAll();
 
-  $array = [];
   foreach ($results as $item) {
-    $array[] = $item->nid;
-    $course_nodes = node_load($item->nid);
-    $course_nodes->field_practical_info_buttons[LANGUAGE_NONE][1]['value'] = 'show_free_course_request';
-    node_save($course_nodes);
+    $course_node = node_load($item->nid);
+    $course_node->field_practical_info_buttons[LANGUAGE_NONE][1]['value'] = 'show_free_course_request';
+    field_attach_presave('node', $course_node);
+    field_attach_update('node', $course_node);
+    watchdog(
+      'ulf_aarhus_settings',
+      'Node array: <pre>@placeholder_name</pre>',
+      array('@placeholder_name' => print_r( $course_node, TRUE)),
+      WATCHDOG_INFO
+    );
   }
 
   // update progress for message
